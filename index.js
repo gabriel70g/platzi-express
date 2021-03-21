@@ -4,17 +4,19 @@ const Tracing = require("@sentry/tracing");
 const express = require("express");
 const path = require("path");
 const boom = require('@hapi/boom');
+const debug = require("debug")("app:express");
 const productsRouter = require("./routes/views/products");
 const productsApiRouter = require("./routes/api/products");
 const authApiRouter = require("./routes/api/auth")
 const isRequestAjaxOrApi = require("./utils/isRequestAjaxOrApi");
-
+const helmet = require('helmet');
 const {
   LogErrors,
   clientErrorHnadler,
   errorHandler,
   wrapErrors,
 } = require("./utils/midlewares/errorsHnadlers");
+
 
 // app
 const app = express();
@@ -36,6 +38,7 @@ const app = express();
 // });
 
 // middlewares
+app.use(helmet())
 app.use(express.json());
 
 //static files
@@ -83,5 +86,5 @@ app.use(errorHandler);
 
 // server
 const server = app.listen(8000, function () {
-  console.log(`Listening http://localhost:${server.address().port}`);
+  debug(`Listening http://localhost:${server.address().port}`);
 });

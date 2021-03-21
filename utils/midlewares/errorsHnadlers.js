@@ -1,4 +1,5 @@
 const boom = require("@hapi/boom");
+const debug = require('debug')("app:error")
 const { config } = require("../../config");
 const isRequestAjaxOrApi = require("../../utils/isRequestAjaxOrApi");
 
@@ -9,7 +10,7 @@ function withErrorStack(err, stack) {
 }
 
 function LogErrors(err, req, res, next) {
-  console.log(err.stack);
+  debug(err.stack);
   next(err);
 }
 

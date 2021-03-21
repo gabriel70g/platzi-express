@@ -10,9 +10,15 @@ const {
   updateProductSchema,
 } = require("../../utils/schemas/poducts");
 
+const {FIVE_MINUTES_IN_SECONDS, 
+  SIXTY_MINUTES_IN_SECONDS } = require('../../utils/time');
+const cacheResponse = require('../../utils/cacheResponse');
+
 const passport = require('passport');
 // JWT Strategy
 require('../../utils/auth/strateggies/jwt');
+
+
 
 function productApi(app) {
   
@@ -20,9 +26,11 @@ function productApi(app) {
   app.use("/api/products", router);
   
   
+   
   const productService = new ProductsService();
 
   router.get("/", async function (req, res, next) {
+    cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
     const { tags } = req.query;
 
     try {
@@ -38,6 +46,7 @@ function productApi(app) {
   });
 
   router.get("/:productId", async function (req, res, next) {
+    cacheResponse(res, SIXTY_MINUTES_IN_SECONDS);
     const { productId } = req.params;
 
     try {
